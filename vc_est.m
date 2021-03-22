@@ -1,4 +1,4 @@
-function [v_c, v_f, v_ms, F_h, Imp_h] = vc_est(t_c, t_f, v, m, h)
+function [v_c, v_f, v_ms, F_h, Imp_h, F_h_adj, Imp_h_adj] = vc_est(t_c, t_f, v, m, h)
 %% Simple hGRF Estimation
 
 % Author:
@@ -15,11 +15,13 @@ function [v_c, v_f, v_ms, F_h, Imp_h] = vc_est(t_c, t_f, v, m, h)
 % v   -- subject's average running speed (m/s)
 
 % Outputs:
-% v_c   -- average horz. speed during contact (m/s)
-% v_f   -- average horz. speed during flight (m/s)
-% v_ms  -- minimum horz. speed at midstance (m/s)
-% F_h   -- peak hGRF (N) (negative in braking/positive in propulsion)
-% Imp_h -- hGRF impulse (N-s) (negative in braking/positive in propulsion)
+% v_c       -- average horz. speed during contact (m/s)
+% v_f       -- average horz. speed during flight (m/s)
+% v_ms      -- minimum horz. speed at midstance (m/s)
+% F_h       -- peak hGRF (N) (negative in braking/positive in propulsion)
+% Imp_h     -- hGRF impulse (N-s) (negative in braking/positive in propulsion)
+% F_h_adj   -- speed-corrected peak hGRF
+% Imp_h_adj -- speed-corrected hGRF impulse
     
 %% Set Constants
     
@@ -52,5 +54,17 @@ F_h = (2*pi/t_c)*(v_f-v_c)*m;
 % hGRF Impulse
 Imp_h = F_h*(t_c/pi);
 
-    
+%% Speed-Corrected hGRF
+
+% Model Coefficients
+v_center = 4.417989;
+vel_c = v_c - v_center;
+B_0 = -27.14884;
+B_v = -41.71226;
+%Estimate-Actual
+Fh_diff = B_0 + B_v*vel_c;
+%Speed-corrected hGRF and Impulse
+F_h_adj = F_h - Fh_diff;
+Imp_h_adj = F_h.adj*(t_c/pi);
+
     end
