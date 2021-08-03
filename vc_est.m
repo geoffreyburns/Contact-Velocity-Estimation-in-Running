@@ -1,31 +1,26 @@
-function [v_c, v_f, v_ms, F_h, Imp_h, F_h_adj, Imp_h_adj] = vc_est(t_c, t_f, v, m, h)
+function [v_c, v_f, v_ms] = vc_est(t_c, t_f, v, m, h)
 %% Simple hGRF Estimation
 
 % Author:
 % Geoffrey Burns
-% Michigan Performance Research Laboratory
 % University of Michigan
-% December 2019
 
 % Inputs:
 % t_f -- flight time (s)
 % t_c -- contact time (s)
-% m   -- subject's mass (kg)
-% h   -- subject's height (m)
 % v   -- subject's average running speed (m/s)
+% m   -- subject's mass (kg)
+% L   -- subject's leg length (m)
+%        Approximate leg length via height: L = 0.53*h
+%        where h is the subject's height (m) per Winter (2005)
 
 % Outputs:
 % v_c       -- average horz. speed during contact (m/s)
 % v_f       -- average horz. speed during flight (m/s)
 % v_ms      -- minimum horz. speed at midstance (m/s)
-% F_h       -- peak hGRF (N) (negative in braking/positive in propulsion)
-% Imp_h     -- hGRF impulse (N-s) (negative in braking/positive in propulsion)
-% F_h_adj   -- speed-corrected peak hGRF
-% Imp_h_adj -- speed-corrected hGRF impulse
     
 %% Set Constants
     
-    L = 0.53*h; %Leg length approximation per Winter (2005)
     g = 9.80665; %acceration due to gravity (m/s^2)
     
     F_v = m*g*(pi/2)*(t_f/t_c+1); %vGRF max estimate per Morin et al. (2005)
@@ -46,25 +41,5 @@ v_c = double(v_c);
 v_f = (v-v_c*(t_c/(t_f+t_c)))*((t_c+t_f)/t_f);
 % Midstance Velocity
 v_ms = 2*v_c-v_f;
-
-%% Approximate F_h
-
-% Peak hGRF (Braking and Propulsion)
-F_h = (2*pi/t_c)*(v_f-v_c)*m;
-% hGRF Impulse
-Imp_h = F_h*(t_c/pi);
-
-%% Speed-Corrected hGRF
-
-% Model Coefficients
-v_center = 4.417989;
-vel_c = v_c - v_center;
-B_0 = -27.14884;
-B_v = -41.71226;
-%Estimate-Actual
-Fh_diff = B_0 + B_v*vel_c;
-%Speed-corrected hGRF and Impulse
-F_h_adj = F_h - Fh_diff;
-Imp_h_adj = F_h.adj*(t_c/pi);
 
     end
