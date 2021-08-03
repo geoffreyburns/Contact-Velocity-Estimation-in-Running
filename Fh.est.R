@@ -1,5 +1,7 @@
-est.vc <- function(t_c, t_f, v, m, L){
+Fh.est <- function(t_c, t_f, v, m, L){
 
+# Horizontal Force Estimation  
+  
 # Author:
 # Geoffrey Burns
 # University of Michigan

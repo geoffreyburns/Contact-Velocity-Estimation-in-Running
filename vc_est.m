@@ -1,5 +1,6 @@
 function [v_c, v_f, v_ms] = vc_est(t_c, t_f, v, m, h)
-%% Simple hGRF Estimation
+
+%% Stance Velocity Estimation
 
 % Author:
 % Geoffrey Burns

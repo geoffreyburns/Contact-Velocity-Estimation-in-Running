@@ -1,5 +1,7 @@
 vc.est <- function(t_c, t_f, v, m, L){
 
+# Stance Velocity Estimation  
+  
 # Author:
 # Geoffrey Burns
 # University of Michigan

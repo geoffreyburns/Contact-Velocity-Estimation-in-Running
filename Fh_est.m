@@ -1,5 +1,6 @@
 function [F_h, F_h_rel, Imp_h, F_h_adj, F_h_adj_rel, Imp_h_adj] = Fh_est(t_c, t_f, v, m, L)
-%% Simple hGRF Estimation
+
+%% Horizontal Force Estimation
 
 % Author:
 % Geoffrey Burns
